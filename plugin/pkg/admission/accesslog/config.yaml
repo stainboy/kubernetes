@@ -1,0 +1,31 @@
+---
+accessLog:
+  enabled: true
+  log: 6
+
+  namespace:
+    include: ["*"]
+    exclude: ["kube-system"]
+  deployment:
+    include: ["*"]
+    exclude: ["etcd", "redis", "eshop"]
+  service:
+    include: ["*"]
+    exclude: []
+
+  spec:
+    name: nginx
+    env:
+    - name: TRACE_TARGET
+    - name: TRACE_CUSTOM
+    image: hyper.cd/occ/nginx-access-log:latest
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 200m
+        memory: 32Mi
+      requests:
+        cpu: 50m

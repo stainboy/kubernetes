@@ -1,0 +1,7 @@
+---
+sigmaRip:
+  enabled: true
+	log: 6
+
+  target: monitor
+

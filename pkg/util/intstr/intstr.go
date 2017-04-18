@@ -60,6 +60,10 @@ func FromInt(val int) IntOrString {
 	return IntOrString{Type: Int, IntVal: int32(val)}
 }
 
+func FromInt32(val int32) IntOrString {
+	return IntOrString{Type: Int, IntVal: val}
+}
+
 // FromString creates an IntOrString object with a string value.
 func FromString(val string) IntOrString {
 	return IntOrString{Type: String, StrVal: val}
