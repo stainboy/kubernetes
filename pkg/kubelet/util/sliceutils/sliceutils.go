@@ -21,6 +21,16 @@ import (
 	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
+func StringInSliceFunc(s string, list []string, precise func(iter, s string) bool) bool {
+	for _, v := range list {
+		if precise(s, v) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func StringInSlice(s string, list []string) bool {
 	for _, v := range list {
 		if v == s {

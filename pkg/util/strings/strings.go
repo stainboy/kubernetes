@@ -74,3 +74,7 @@ func isVowel(c rune) bool {
 	}
 	return false
 }
+
+func Contains(s, sep string) bool {
+	return strings.Index(s, sep) != -1
+}
