@@ -21,7 +21,9 @@ import (
 	"fmt"
 	"io"
 	"text/template"
+	"time"
 
+	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -31,9 +33,30 @@ type TemplatePrinter struct {
 	template    *template.Template
 }
 
+func OldThan(u interface{}, hours time.Duration) bool {
+	var t time.Time
+	switch u.(type) {
+	case string:
+		t, _ = time.Parse(time.RFC3339, u.(string))
+	case time.Time:
+		t = u.(time.Time)
+	}
+	return t.Add(hours * time.Hour).Before(time.Now())
+}
+
+func ParseQuantity(s string) int64 {
+	q, err := resource.ParseQuantity(s)
+	if err != nil {
+		return 0
+	}
+	return q.MilliValue()
+}
+
 func NewTemplatePrinter(tmpl []byte) (*TemplatePrinter, error) {
 	t, err := template.New("output").
 		Funcs(template.FuncMap{"exists": exists}).
+		Funcs(template.FuncMap{"oldThan": OldThan}).
+		Funcs(template.FuncMap{"quantity": ParseQuantity}).
 		Parse(string(tmpl))
 	if err != nil {
 		return nil, err
