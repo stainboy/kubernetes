@@ -25,6 +25,7 @@ import (
 
 	// Admission policies
 	"k8s.io/apiserver/pkg/admission"
+	"k8s.io/kubernetes/plugin/pkg/admission/accesslog"
 	"k8s.io/kubernetes/plugin/pkg/admission/admit"
 	"k8s.io/kubernetes/plugin/pkg/admission/alwayspullimages"
 	"k8s.io/kubernetes/plugin/pkg/admission/antiaffinity"
@@ -47,12 +48,14 @@ import (
 	"k8s.io/kubernetes/plugin/pkg/admission/security/podsecuritypolicy"
 	"k8s.io/kubernetes/plugin/pkg/admission/securitycontext/scdeny"
 	"k8s.io/kubernetes/plugin/pkg/admission/serviceaccount"
+	"k8s.io/kubernetes/plugin/pkg/admission/sigmarip"
 	"k8s.io/kubernetes/plugin/pkg/admission/storageclass/setdefault"
 	"k8s.io/kubernetes/plugin/pkg/admission/webhook"
 )
 
 // registerAllAdmissionPlugins registers all admission plugins
 func registerAllAdmissionPlugins(plugins *admission.Plugins) {
+	accesslog.Register(plugins)
 	admit.Register(plugins)
 	alwayspullimages.Register(plugins)
 	antiaffinity.Register(plugins)
@@ -75,6 +78,7 @@ func registerAllAdmissionPlugins(plugins *admission.Plugins) {
 	podsecuritypolicy.Register(plugins)
 	scdeny.Register(plugins)
 	serviceaccount.Register(plugins)
+	sigmarip.Register(plugins)
 	setdefault.Register(plugins)
 	webhook.Register(plugins)
 }
