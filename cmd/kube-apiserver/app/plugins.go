@@ -24,6 +24,7 @@ import (
 	_ "k8s.io/kubernetes/pkg/cloudprovider/providers"
 
 	// Admission policies
+	_ "k8s.io/kubernetes/plugin/pkg/admission/accesslog"
 	_ "k8s.io/kubernetes/plugin/pkg/admission/admit"
 	_ "k8s.io/kubernetes/plugin/pkg/admission/alwayspullimages"
 	_ "k8s.io/kubernetes/plugin/pkg/admission/antiaffinity"
@@ -44,5 +45,6 @@ import (
 	_ "k8s.io/kubernetes/plugin/pkg/admission/security/podsecuritypolicy"
 	_ "k8s.io/kubernetes/plugin/pkg/admission/securitycontext/scdeny"
 	_ "k8s.io/kubernetes/plugin/pkg/admission/serviceaccount"
+	_ "k8s.io/kubernetes/plugin/pkg/admission/sigmarip"
 	_ "k8s.io/kubernetes/plugin/pkg/admission/storageclass/default"
 )

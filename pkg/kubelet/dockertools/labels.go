@@ -38,6 +38,7 @@ import (
 const (
 	kubernetesPodDeletionGracePeriodLabel    = "io.kubernetes.pod.deletionGracePeriod"
 	kubernetesPodTerminationGracePeriodLabel = "io.kubernetes.pod.terminationGracePeriod"
+	kubernetesPodIPLabel                     = "io.kubernetes.pod.ip"
 
 	kubernetesContainerHashLabel                     = "io.kubernetes.container.hash"
 	kubernetesContainerRestartCountLabel             = "io.kubernetes.container.restartCount"
@@ -86,6 +87,7 @@ func newLabels(container *v1.Container, pod *v1.Pod, restartCount int, enableCus
 	labels[kubernetesContainerRestartCountLabel] = strconv.Itoa(restartCount)
 	labels[kubernetesContainerTerminationMessagePathLabel] = container.TerminationMessagePath
 	labels[kubernetesContainerTerminationMessagePolicyLabel] = string(container.TerminationMessagePolicy)
+	labels[kubernetesPodIPLabel] = pod.Status.PodIP
 	if container.Lifecycle != nil && container.Lifecycle.PreStop != nil {
 		// Using json enconding so that the PreStop handler object is readable after writing as a label
 		rawPreStop, err := json.Marshal(container.Lifecycle.PreStop)

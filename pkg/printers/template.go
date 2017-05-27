@@ -20,7 +20,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strings"
 	"text/template"
+	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -31,9 +33,22 @@ type TemplatePrinter struct {
 	template    *template.Template
 }
 
+func OldThan(u interface{}, hours time.Duration) bool {
+	var t time.Time
+	switch u.(type) {
+	case string:
+		t, _ = time.Parse(time.RFC3339, u.(string))
+	case time.Time:
+		t = u.(time.Time)
+	}
+	return t.Add(hours * time.Hour).Before(time.Now())
+}
+
 func NewTemplatePrinter(tmpl []byte) (*TemplatePrinter, error) {
 	t, err := template.New("output").
 		Funcs(template.FuncMap{"exists": exists}).
+		Funcs(template.FuncMap{"split": strings.SplitN}).
+		Funcs(template.FuncMap{"oldThan": OldThan}).
 		Parse(string(tmpl))
 	if err != nil {
 		return nil, err
